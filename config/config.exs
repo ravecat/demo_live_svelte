@@ -7,6 +7,19 @@
 # General application configuration
 import Config
 
+config :demo_phoenix, :scopes,
+  user: [
+    default: true,
+    module: DemoPhoenix.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:user, :id],
+    schema_key: :user_id,
+    schema_type: :id,
+    schema_table: :users,
+    test_data_fixture: DemoPhoenix.AccountsFixtures,
+    test_login_helper: :register_and_log_in_user
+  ]
+
 config :demo_phoenix,
   ecto_repos: [DemoPhoenix.Repo],
   generators: [timestamp_type: :utc_datetime]
