@@ -2,11 +2,11 @@
 // you uncomment its entry in "assets/js/app.js".
 
 // Bring in Phoenix channels client library:
-import {Socket} from "phoenix"
+import { Socket, Presence } from "phoenix";
 
 // And connect to the path in "lib/demo_phoenix_web/endpoint.ex". We pass the
 // token for authentication. Read below how it should be used.
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/socket", { params: { token: window.userToken } });
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -51,34 +51,69 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 //     end
 //
 // Finally, connect to the socket:
-socket.connect()
+// if (window.userToken) {
+socket.connect();
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("room:lobby", {})
-let chatInput = document.querySelector("#chat-input")
-let messagesContainer = document.querySelector("#messages")
+let channel = socket.channel("room:lobby", {});
+let chatInput = document.querySelector("#chat-input");
+let messagesContainer = document.querySelector("#messages");
+let onlineUsers = document.querySelector("#online-users");
 
-chatInput.addEventListener("keypress", event => {
-  if(event.key === 'Enter'){
-    channel.push("new_msg", {body: chatInput.value})
-    chatInput.value = ""
+let presence = new Presence(channel);
+
+function renderOnlineUsers(presence) {
+  if (!onlineUsers) return;
+
+  let html = "";
+
+  presence.list((id, { metas: [first, ...rest] }) => {
+    console.log(rest);
+    let count = rest.length + 1;
+    const onlineTime = new Date(
+      parseInt(first.online_at) * 1000
+    ).toLocaleTimeString();
+
+    html += `<li>
+        <div><strong>ID пользователя:</strong> ${first.user_id}</div>
+        <div><strong>Email:</strong> ${first.email}</div>
+        <div><strong>Присоединился в:</strong> ${onlineTime}</div>
+        <div><strong>Подключений:</strong> ${count}</div>
+      </li>`;
+  });
+
+  onlineUsers.innerHTML = `<ul>${html}</ul>`;
+}
+
+presence.onSync(() => renderOnlineUsers(presence));
+
+chatInput?.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    channel.push("new_msg", { body: chatInput.value });
+    chatInput.value = "";
   }
-})
+});
 
-channel.on("new_msg", payload => {
-  let messageItem = document.createElement("p")
-  
+channel.on("new_msg", (payload) => {
+  let messageItem = document.createElement("p");
+
   if (payload.user_email) {
-    messageItem.innerHTML = `<strong>${payload.user_email}</strong>: ${payload.body}`
+    messageItem.innerHTML = `<strong>${payload.user_email}</strong>: ${payload.body}`;
   } else {
-    messageItem.innerText = `${payload.body}`
+    messageItem.innerText = `${payload.body}`;
   }
-  
-  messagesContainer.appendChild(messageItem)
-})
 
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  messagesContainer.appendChild(messageItem);
+});
 
-export default socket
+channel
+  .join()
+  .receive("ok", (resp) => {
+    console.log("Joined successfully", resp);
+  })
+  .receive("error", (resp) => {
+    console.log("Unable to join", resp);
+  });
+// }
+
+export default socket;

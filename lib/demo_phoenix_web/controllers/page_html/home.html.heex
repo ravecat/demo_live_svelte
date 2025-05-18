@@ -38,7 +38,10 @@
     />
   </svg>
   <div class="absolute bottom-4 right-4 w-64">
-    <div id="messages" role="log" aria-live="polite"></div>
+    <div class="mb-4">
+      <div id="online-users" class="text-gray-200"></div>
+    </div>
+    <div id="messages" role="log" aria-live="polite" class="mb-2 max-h-40 overflow-y-auto"></div>
     <input
       id="chat-input"
       type="text"

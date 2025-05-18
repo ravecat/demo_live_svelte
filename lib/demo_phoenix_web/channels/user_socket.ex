@@ -25,6 +25,7 @@ defmodule DemoPhoenixWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+
   @impl true
   def connect(%{"token" => token}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "user socket", token, max_age: 1_209_600) do
@@ -34,6 +35,11 @@ defmodule DemoPhoenixWeb.UserSocket do
       {:error, _} ->
         :error
     end
+  end
+
+  @impl true
+  def connect(_params, _socket, _connect_info) do
+    :error
   end
 
   # Socket IDs are topics that allow you to identify all sockets for a given user:

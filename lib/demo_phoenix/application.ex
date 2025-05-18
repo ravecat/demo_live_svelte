@@ -14,6 +14,8 @@ defmodule DemoPhoenix.Application do
       {Phoenix.PubSub, name: DemoPhoenix.PubSub},
       # Start a worker by calling: DemoPhoenix.Worker.start_link(arg)
       # {DemoPhoenix.Worker, arg},
+      # Add Presence for tracking user online status
+      DemoPhoenixWeb.Presence,
       # Start to serve requests, typically the last entry
       DemoPhoenixWeb.Endpoint
     ]
