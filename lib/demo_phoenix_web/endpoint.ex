@@ -26,6 +26,10 @@ defmodule DemoPhoenixWeb.Endpoint do
     gzip: not code_reloading?,
     only: DemoPhoenixWeb.static_paths()
 
+  socket "/socket", DemoPhoenixWeb.UserSocket,
+    websocket: true,
+    longpoll: false
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

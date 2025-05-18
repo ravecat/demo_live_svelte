@@ -279,6 +279,15 @@ defmodule DemoPhoenixWeb.UserAuth do
     end
   end
 
+  def put_user_token(conn, _) do
+    if conn.assigns.current_scope && conn.assigns.current_scope.user do
+      token = Phoenix.Token.sign(conn, "user socket", conn.assigns.current_scope.user.id)
+      assign(conn, :user_token, token)
+    else
+      conn
+    end
+  end
+
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
   end
