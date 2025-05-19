@@ -23,9 +23,6 @@ defmodule DemoPhoenixWeb.RoomChannel do
         online_at: System.system_time(:second)
       })
 
-    dbg(Presence.list(socket))
-
-
     push(socket, "presence_state", Presence.list(socket))
     {:noreply, socket}
   end
