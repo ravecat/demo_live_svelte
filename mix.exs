@@ -33,6 +33,7 @@ defmodule DemoPhoenix.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:live_svelte, "~> 0.16.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.8.0-rc.3", override: true},
       {:phoenix_ecto, "~> 4.5"},
@@ -43,7 +44,6 @@ defmodule DemoPhoenix.MixProject do
       {:phoenix_live_view, "~> 1.0.9"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.9", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -71,7 +71,7 @@ defmodule DemoPhoenix.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "cmd --cd assets npm install"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
@@ -79,7 +79,7 @@ defmodule DemoPhoenix.MixProject do
       "assets.build": ["tailwind demo_phoenix", "esbuild demo_phoenix"],
       "assets.deploy": [
         "tailwind demo_phoenix --minify",
-        "esbuild demo_phoenix --minify",
+        "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ]
     ]

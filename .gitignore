@@ -37,3 +37,9 @@ npm-debug.log
 
 !.formatter.exs
 !.gitignore
+
+# Ignore automatically generated Svelte files by the ~V sigil
+/assets/svelte/_build/
+
+# Ignore ssr build for svelte.
+/priv/svelte/

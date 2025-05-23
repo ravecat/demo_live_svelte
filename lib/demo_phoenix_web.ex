@@ -52,6 +52,8 @@ defmodule DemoPhoenixWeb do
     quote do
       use Phoenix.LiveView
 
+      import LiveSvelte
+
       unquote(html_helpers())
     end
   end
@@ -81,6 +83,8 @@ defmodule DemoPhoenixWeb do
     quote do
       # Translation
       use Gettext, backend: DemoPhoenixWeb.Gettext
+
+      import LiveSvelte
 
       # HTML escaping functionality
       import Phoenix.HTML
