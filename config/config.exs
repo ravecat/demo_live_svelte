@@ -15,9 +15,10 @@ config :demo_phoenix, :scopes,
     access_path: [:user, :id],
     schema_key: :user_id,
     schema_type: :id,
-    schema_table: :users,
-    test_data_fixture: DemoPhoenix.AccountsFixtures,
-    test_login_helper: :register_and_log_in_user
+    schema_migration_type: :bigint,
+    schema_table: nil,
+    # test_data_fixture: DemoPhoenix.AccountsFixtures,
+    # test_login_helper: :register_and_log_in_user
   ]
 
 config :demo_phoenix,
