@@ -48,7 +48,3 @@ npm-debug.log
 tasks.json
 tasks/
 scripts/
-
-# MCP artifacts
-context_portal/
-projectBrief.md
